@@ -375,7 +375,7 @@ public class NativeSet extends ScriptableObject {
         if (thisSize > otherSize) {
             // Only validate keys when we'll use it
             Callable keysMethod = getKeysMethod(cx, scope, otherObj);
-            
+
             // First, add all elements from this set
             for (Hashtable.Entry entry : entries) {
                 result.js_add(entry.key);
@@ -404,9 +404,9 @@ public class NativeSet extends ScriptableObject {
         } else {
             // When this.size <= other.size, iterate through this and check with has()
             // Validate both keys and has are callable per Test262
-            getKeysMethod(cx, scope, otherObj);  // Still validate keys for consistency
+            getKeysMethod(cx, scope, otherObj); // Still validate keys for consistency
             Object hasMethod = getHas(cx, scope, otherObj);
-            
+
             for (Hashtable.Entry entry : entries) {
                 Object key = entry.key;
                 Object inOther = callHas(cx, scope, otherObj, hasMethod, key);
