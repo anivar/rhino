@@ -6,18 +6,11 @@
 
 package org.mozilla.javascript;
 
-/**
- * Simple Android compatibility helper.
- *
- * <p>Provides minimal Android detection for automatic interpreter mode selection.
- */
 class AndroidCompat {
-
     private static final boolean IS_ANDROID = checkAndroid();
 
     private static boolean checkAndroid() {
         try {
-            // More reliable than checking VM name - detects both Dalvik and ART
             Class.forName("android.os.Build");
             return true;
         } catch (ClassNotFoundException e) {
@@ -25,7 +18,6 @@ class AndroidCompat {
         }
     }
 
-    /** Returns true if running on Android. */
     static boolean isAndroid() {
         return IS_ANDROID;
     }
