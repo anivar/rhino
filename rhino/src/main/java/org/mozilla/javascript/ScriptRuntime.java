@@ -260,6 +260,8 @@ public class ScriptRuntime {
         // ES2021 features
         if (cx.getLanguageVersion() >= Context.VERSION_ES6) {
             new LazilyLoadedCtor(scope, "WeakRef", sealed, true, NativeWeakRef::init);
+            new LazilyLoadedCtor(
+                    scope, "FinalizationRegistry", sealed, true, NativeFinalizationRegistry::init);
         }
 
         if (scope instanceof TopLevel) {
