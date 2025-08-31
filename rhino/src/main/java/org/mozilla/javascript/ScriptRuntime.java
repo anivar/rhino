@@ -53,12 +53,10 @@ public class ScriptRuntime {
     protected ScriptRuntime() {}
 
     /**
-     * Static non-final field for template literal proxy to prevent Android JIT inlining. This field
-     * is intentionally non-final and public to ensure the Android compiler cannot inline the
-     * template literal logic, which would cause the interpretLoop method to become too large for
-     * JIT compilation.
+     * Prevents Android JIT from inlining template literal logic. volatile forces indirect calls,
+     * keeping interpretLoop under 7392KB limit.
      */
-    public static TemplateLiteralProxy templateLiteralProxy =
+    public static volatile TemplateLiteralProxy templateLiteralProxy =
             ScriptRuntime::getTemplateLiteralCallSiteImpl;
 
     /**
@@ -5849,16 +5847,12 @@ public class ScriptRuntime {
 
     public static Scriptable getTemplateLiteralCallSite(
             Context cx, Scriptable scope, Object[] strings, int index) {
-        // Use the static proxy field to prevent Android JIT inlining
+        // Indirect call prevents Android JIT inlining
         return templateLiteralProxy.getCallSite(cx, scope, strings, index);
     }
 
-    /**
-     * Implementation of template literal call site creation. This method is called via the
-     * templateLiteralProxy field to prevent Android JIT from inlining the logic into the
-     * interpreter loop.
-     */
-    public static Scriptable getTemplateLiteralCallSiteImpl(
+    /** Creates frozen call site object for tagged template literals (ES6). */
+    private static Scriptable getTemplateLiteralCallSiteImpl(
             Context cx, Scriptable scope, Object[] strings, int index) {
         Object callsite = strings[index];
 

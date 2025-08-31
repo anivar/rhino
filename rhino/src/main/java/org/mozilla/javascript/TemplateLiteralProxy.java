@@ -7,10 +7,8 @@
 package org.mozilla.javascript;
 
 /**
- * A proxy for template literal operations, allowing the template literal implementation to be
- * loaded optionally and reducing the complexity of the interpreter loop.
- *
- * @author Anivar Aravind (following the pattern established by Norris Boyd for RegExpProxy)
+ * Proxy to prevent Android JIT from inlining template literal logic. Keeps interpretLoop under
+ * Android's 7392KB method size limit.
  */
 public interface TemplateLiteralProxy {
     /**
